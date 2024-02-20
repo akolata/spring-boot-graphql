@@ -1,0 +1,48 @@
+scalar LocalDateTime
+scalar DateTime
+@specifiedBy(url:
+"https://scalars.graphql.org/andimarek/date-time.html"
+)
+
+type Query {
+    findAllBooks: [BookModel]!
+    findAllReviewsReturnEntity: [ReviewModel]!
+    findBookById(id: ID!): BookModel
+    findBookByTitle(title: String!): [BookModel]!
+}
+
+type Mutation {
+    createBook(input: CreateBookInput!): BookModel!
+}
+
+type BookModel {
+    id: ID
+    version: Int
+    createdAt: LocalDateTime
+    updatedAt: LocalDateTime
+    title: String
+    authors: [AuthorModel]
+    reviews: [ReviewModel]
+}
+
+type AuthorModel {
+    id: ID
+    version: Int
+    createdAt: LocalDateTime
+    updatedAt: LocalDateTime
+    firstName: String
+    lastName: String
+}
+
+type ReviewModel {
+    id: ID
+    version: Int
+    createdAt: LocalDateTime
+    updatedAt: LocalDateTime
+    review: String
+}
+
+input CreateBookInput {
+    title: String!
+    authorsIds: [ID]
+}
