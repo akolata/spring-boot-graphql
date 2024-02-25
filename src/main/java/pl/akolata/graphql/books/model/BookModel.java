@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import pl.akolata.graphql.books.persistence.entity.Book;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,8 +16,6 @@ public class BookModel {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String title;
-    private List<AuthorModel> authors = new ArrayList<>();
-    private List<ReviewModel> reviews = new ArrayList<>();
 
     public BookModel(Book book) {
         this.id = book.getId();
