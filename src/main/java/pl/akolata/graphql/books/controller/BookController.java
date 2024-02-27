@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.data.method.annotation.*;
+import org.springframework.graphql.execution.ErrorType;
 import org.springframework.stereotype.Controller;
 import pl.akolata.graphql.books.model.AuthorModel;
 import pl.akolata.graphql.books.model.BookModel;
@@ -64,6 +65,17 @@ class BookController {
         return books;
     }
 
+    @QueryMapping
+    public String throwAnException() {
+        throw new CustomException("Let's see how @GraphQlExceptionHandler works");
+    }
+
+    @GraphQlExceptionHandler
+    public GraphQLError handle(CustomException ex) {
+        log.info("[BookController][handle CustomException]", ex);
+        return GraphQLError.newError().errorType(ErrorType.INTERNAL_ERROR).message(ex.getMessage()).build();
+    }
+
     @MutationMapping
     public BookModel createBook(@Argument @Valid CreateBookInput input) {
         log.info("[BookController][createBook({})]", input);
@@ -107,5 +119,11 @@ class BookController {
             reviewsModelsByBookModels.put(bookModel, reviewModels);
         }
         return reviewsModelsByBookModels;
+    }
+
+    public static class CustomException extends RuntimeException {
+        public CustomException(String message) {
+            super(message);
+        }
     }
 }

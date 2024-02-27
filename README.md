@@ -52,17 +52,6 @@ query findBookByTitle {
     }
 }
 
-mutation createBookUsingVariable($bookInput: CreateBookInput!) {
-    createBook(input: $bookInput) {
-        id
-        createdAt
-        title
-        authors {
-            ...AuthorView
-        }
-    }
-}
-
 query findAllBooksAuthorsOnly {
     findAllBooks {
         title
@@ -85,6 +74,21 @@ query findAllBooksReviewsOnly {
 query findAllBooks {
     findAllBooks {
         ...BookView
+    }
+}
+
+query ex {
+    throwAnException
+}
+
+mutation createBookUsingVariable($bookInput: CreateBookInput!) {
+    createBook(input: $bookInput) {
+        id
+        createdAt
+        title
+        authors {
+            ...AuthorView
+        }
     }
 }
 

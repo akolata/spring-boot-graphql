@@ -9,6 +9,7 @@ type Query {
     findAllReviewsReturnEntity: [ReviewModel]!
     findBookById(id: ID!): BookModel
     findBookByTitle(title: String!): [BookModel]!
+    throwAnException: String
 }
 
 type Mutation {
