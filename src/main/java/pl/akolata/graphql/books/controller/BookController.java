@@ -1,5 +1,7 @@
 package pl.akolata.graphql.books.controller;
 
+import graphql.GraphQLError;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.data.method.annotation.*;
@@ -63,7 +65,7 @@ class BookController {
     }
 
     @MutationMapping
-    public BookModel createBook(@Argument CreateBookInput input) {
+    public BookModel createBook(@Argument @Valid CreateBookInput input) {
         log.info("[BookController][createBook({})]", input);
         Book book = bookService.createBook(input);
         log.info("[BookController][createBook({})] created with id {}", input, book.getId());
