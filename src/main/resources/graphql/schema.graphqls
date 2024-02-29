@@ -24,6 +24,8 @@ type BookModel {
     title: String
     authors: [AuthorModel]
     reviews: [ReviewModel]
+    firstPublishYear: String
+    ping: String!
 }
 
 type AuthorModel {

@@ -12,6 +12,12 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, String> {
     List<Book> findByTitleLikeIgnoreCase(String title);
 
+    @Query("FROM Book book LEFT JOIN FETCH book.authors")
+    List<Book> findAllFetchAuthors();
+
+    @Query("FROM Book book LEFT JOIN FETCH book.authors LEFT JOIN FETCH book.reviews")
+    List<Book> findAllFetchAuthorsAndReviews();
+
     @Query("FROM Book book LEFT JOIN FETCH book.reviews WHERE book.id IN :booksIds")
     List<Book> findByIdsFetchReviews(Collection<String> booksIds);
 }

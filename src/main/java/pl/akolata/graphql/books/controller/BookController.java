@@ -1,12 +1,18 @@
 package pl.akolata.graphql.books.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import graphql.GraphQLError;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.data.method.annotation.*;
 import org.springframework.graphql.execution.ErrorType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.client.RestTemplate;
 import pl.akolata.graphql.books.model.AuthorModel;
 import pl.akolata.graphql.books.model.BookModel;
 import pl.akolata.graphql.books.model.CreateBookInput;
@@ -74,6 +80,21 @@ class BookController {
     public GraphQLError handle(CustomException ex) {
         log.info("[BookController][handle CustomException]", ex);
         return GraphQLError.newError().errorType(ErrorType.INTERNAL_ERROR).message(ex.getMessage()).build();
+    }
+
+    @SneakyThrows
+    @SchemaMapping
+    public String firstPublishYear(BookModel bookModel) {
+        log.info("[BookController][BookModel#firstPublishYear data fetcher] for BookModel(id:{}, title:{})", bookModel.getId(),
+            bookModel.getTitle());
+        RestTemplate restTemplate = new RestTemplate();
+        String openLibraryURL
+            = "https://openlibrary.org/search.json?q=" + bookModel.getTitle();
+        ResponseEntity<String> response = restTemplate.getForEntity(openLibraryURL, String.class);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(response.getBody());
+        ArrayNode docs = (ArrayNode) root.path("docs");
+        return docs.get(0).get("first_publish_year").asText();
     }
 
     @MutationMapping

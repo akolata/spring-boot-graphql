@@ -92,6 +92,14 @@ mutation createBookUsingVariable($bookInput: CreateBookInput!) {
     }
 }
 
+query resolvers {
+    findBookByTitle(title:"Patterns of Enterprise Application Architecture") {
+        title
+        ping
+        firstPublishYear
+    }
+}
+
 fragment ReviewView on ReviewModel {
     id
     review
